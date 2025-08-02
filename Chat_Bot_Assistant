@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .chat-container {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .chat-box {
+      background: white;
+      border-radius: 10px;
+      padding: 10px;
+      height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .message {
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 10px;
+      max-width: 70%;
+    }
+    .user {
+      background: #d1e7dd;
+      align-self: flex-end;
+    }
+    .bot {
+      background: #f8d7da;
+      align-self: flex-start;
+    }
+    .input-container {
+      display: flex;
+      padding: 10px;
+      background: white;
+      border-top: 1px solid #ccc;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-box" id="chatBox"></div>
+    <div class="input-container">
+      <input type="text" id="userInput" placeholder="Type your message here..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    function sendMessage() {
+      const userInput = document.getElementById("userInput");
+      const chatBox = document.getElementById("chatBox");
+      const userMessage = userInput.value.trim();
+      if (!userMessage) return;
+
+      const userDiv = document.createElement("div");
+      userDiv.className = "message user";
+      userDiv.textContent = userMessage;
+      chatBox.appendChild(userDiv);
+
+      const botDiv = document.createElement("div");
+      botDiv.className = "message bot";
+      botDiv.textContent = getBotResponse(userMessage);
+      chatBox.appendChild(botDiv);
+
+      userInput.value = "";
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function getBotResponse(input) {
+      input = input.toLowerCase();
+      if (input.includes("hello") || input.includes("hi")) {
+        return "Hello! How can I assist you today?";
+      } else if (input.includes("your name")) {
+        return "I am a simple chatbot.";
+      } else if (input.includes("bye")) {
+        return "Goodbye! Have a great day!";
+      } else {
+        return "I'm sorry, I don't understand that yet.";
+      }
+    }
+  </script>
+
+  <!-- Watson Assistant Embed Script -->
+  <script>
+    window.watsonAssistantChatOptions = {
+      integrationID: "01411fb5-85b0-406f-9a84-fcfe7fd39f8d", // The ID of this integration.
+      region: "au-syd", // The region your integration is hosted in.
+      serviceInstanceID: "3c796f07-404d-46b9-84ec-7f25f666c93e", // The ID of your service instance.
+      onLoad: async (instance) => { await instance.render(); }
+    };
+    setTimeout(function(){
+      const t = document.createElement('script');
+      t.src = "https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + 
+              (window.watsonAssistantChatOptions.clientVersion || 'latest') + 
+              "/WatsonAssistantChatEntry.js";
+      document.head.appendChild(t);
+    });
+  </script>
+</body>
+</html>
